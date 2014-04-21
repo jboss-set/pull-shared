@@ -109,12 +109,12 @@ public class RedhatPullRequest {
         final List<URL> urls = extractURLs(Constants.JIRA_BASE_BROWSE, Constants.RELATED_JIRA_PATTERN);
         final List<Issue> jiraIssues = new ArrayList<Issue>();
         for (URL url : urls) {
-            if (jiraHelper.accepts(url)) {
-                JiraIssue jiraIssue = (JiraIssue) jiraHelper.findIssue(url);
-                if (jiraIssue != null) {
-                    jiraIssues.add(jiraIssue);
-                }
-            }
+//            if (jiraHelper.accepts(url)) {
+//                JiraIssue jiraIssue = (JiraIssue) jiraHelper.findIssue(url);
+//                if (jiraIssue != null) {
+//                    jiraIssues.add(jiraIssue);
+//                }
+//            }
         }
         return jiraIssues;
     }
@@ -324,8 +324,8 @@ public class RedhatPullRequest {
                 return bzHelper.updateStatus(issue.getUrl(), status);
         } else if (issue instanceof JiraIssue) {
             // Do Jira stuff
-            if (jiraHelper.accepts(issue.getUrl()))
-                return jiraHelper.updateStatus(issue.getUrl(), status);
+//            if (jiraHelper.accepts(issue.getUrl()))
+//                return jiraHelper.updateStatus(issue.getUrl(), status);
         } else {
             throw new IllegalArgumentException("Your issue implementation has to be an instance of a Bug or " + "JiraIssue");
         }
