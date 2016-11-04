@@ -40,7 +40,7 @@ public interface IssueHelper {
      * @throws java.lang.IllegalArgumentException - if the String is incorrect. This will be if the remote server
      * rejects the request.
      */
-    Issue findIssue(URL url) throws IllegalArgumentException;
+    Issue findIssue(URL url);
 
 
     /**

@@ -22,9 +22,11 @@
 
 package org.jboss.pull.shared.connectors.jira;
 
-import com.atlassian.jira.rest.client.JiraRestClient;
-import com.atlassian.jira.rest.client.NullProgressMonitor;
-import com.atlassian.jira.rest.client.internal.jersey.JerseyJiraRestClientFactory;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jboss.pull.shared.Constants;
 import org.jboss.pull.shared.Util;
@@ -32,14 +34,15 @@ import org.jboss.pull.shared.connectors.IssueHelper;
 import org.jboss.pull.shared.connectors.common.AbstractCommonIssueHelper;
 import org.jboss.pull.shared.connectors.common.Issue;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import com.atlassian.jira.rest.client.JiraRestClient;
+import com.atlassian.jira.rest.client.NullProgressMonitor;
+import com.atlassian.jira.rest.client.internal.jersey.JerseyJiraRestClientFactory;
 
 /**
  * @author navssurtani
  */
 public class JiraHelper extends AbstractCommonIssueHelper implements IssueHelper{
+    private Logger LOG = Logger.getLogger(JiraHelper.class.getName());
 
     private static String JIRA_LOGIN;
     private static String JIRA_PASSWORD;
@@ -60,7 +63,7 @@ public class JiraHelper extends AbstractCommonIssueHelper implements IssueHelper
     }
 
     @Override
-    public Issue findIssue(URL url) throws IllegalArgumentException {
+    public Issue findIssue(URL url) {
         try {
             String key = cutKeyFromURL(url);
             com.atlassian.jira.rest.client.domain.Issue fromServer = restClient.getIssueClient()
@@ -68,7 +71,8 @@ public class JiraHelper extends AbstractCommonIssueHelper implements IssueHelper
             return new JiraIssue(fromServer);
         } catch (RuntimeException e) {
             // Atlassian is very poor in reporting proper context
-            throw new RuntimeException("Failed to find issue " + url, e);
+            LOG.log(Level.WARNING, "Failed to find issue " + url, e);
+            return null;
         }
     }
 
